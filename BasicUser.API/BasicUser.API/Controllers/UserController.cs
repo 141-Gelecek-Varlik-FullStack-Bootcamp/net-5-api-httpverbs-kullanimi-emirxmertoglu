@@ -45,10 +45,36 @@ namespace BasicUser.API.Controllers
         };
 
         [HttpGet]
-        public List<User> GetUsers()
+        public IActionResult GetUsers()
         {
             var userList = UserList.OrderBy(x => x.Id).ToList<User>();
-            return userList;
+            return Ok(userList);
+        }
+
+        [HttpGet("{username}")]
+        public IActionResult GetUserByUserName(string username)
+        {
+            var user = UserList.Where(x => x.UserName == username).SingleOrDefault();
+            if (user is not null)
+            {
+                return Ok(user);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateUser([FromBody] User newUser)
+        {
+            var user = UserList.SingleOrDefault(x => x.UserName == newUser.UserName);
+            if (user is not null)
+            {
+                return BadRequest();
+            }
+            UserList.Add(newUser);
+            return Ok();
         }
     }
 }
