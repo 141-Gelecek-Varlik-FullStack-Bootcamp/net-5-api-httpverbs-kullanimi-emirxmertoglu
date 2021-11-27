@@ -76,5 +76,20 @@ namespace BasicUser.API.Controllers
             UserList.Add(newUser);
             return Ok();
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser(int id)
+        {
+            var user = UserList.SingleOrDefault(x => x.Id == id);
+
+            if (user is null)
+            {
+                return BadRequest();
+            }
+
+            UserList.Remove(user);
+
+            return Ok();
+        }
     }
 }
