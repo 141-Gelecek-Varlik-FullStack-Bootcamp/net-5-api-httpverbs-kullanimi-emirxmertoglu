@@ -76,5 +76,24 @@ namespace BasicUser.API.Controllers
             UserList.Add(newUser);
             return Ok();
         }
+
+        [HttpPut("{username}")]
+        public IActionResult UpdateUser(string username, [FromBody] User updatedUser)
+        {
+            var user = UserList.SingleOrDefault(x => x.UserName == username);
+
+            if (user is null)
+            {
+                return BadRequest();
+            }
+
+            user.Email = updatedUser.Email != default ? updatedUser.Email : user.Email;
+            user.FullName = updatedUser.FullName != default ? updatedUser.FullName : user.FullName;
+            user.Password = updatedUser.Password != default ? updatedUser.Password : user.Password;
+            user.RePassword = updatedUser.RePassword != default ? updatedUser.RePassword : user.RePassword;
+            user.UserName = updatedUser.UserName != default ? updatedUser.UserName : user.UserName;
+
+            return Ok();
+        }
     }
 }
